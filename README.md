@@ -11,3 +11,6 @@ These libraries are sorted on their popularity and how recent they have been upd
 - C (2020) (0 star): https://github.com/Juve45/abe-cas
 - Java (2018) (10 star): https://github.com/rajatks/CP-ABE
 - Python (2016) (17 star): https://github.com/jfdm/pyPEBEL
+
+## Python 2020 (ABE)
+We were unable to get this project to work as it required the charm-crypto library from 2011 which is incompatible with modern operating systems.
