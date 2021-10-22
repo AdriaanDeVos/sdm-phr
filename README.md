@@ -1,11 +1,16 @@
 # sdm-phr
 Provides an implementation of CP-ABE on the assignment for personal health records.
 
+## Docker Preparations
+1. Install docker on your system: https://docs.docker.com/engine/install/
+2. Build the docker image with: `docker build -t sdm .`
+3. Run the docker image with: `docker run -it sdm`
+
 ## Recommendations
 1. ABE (2020) with Python 3.7 according to this installation: https://lrusso96.github.io/blog/cryptography/2021/03/04/charm-setup.html
 2. open-ABE (2021) building CLI executables within a docker instance
-4. Manually trying to copy and import files from https://github.com/JHUISI/charm/blob/dev/charm/toolbox/ to circumvent the library compile
-3. Manually rebuilding existing libraries to replace the non-compiling and outdated cryptographic library
+3. Manually trying to copy and import files from https://github.com/JHUISI/charm/blob/dev/charm/toolbox/ to circumvent the library compile
+4. Manually rebuilding existing libraries to replace the non-compiling and outdated cryptographic library
 
 ## Possible libraries found
 These libraries are sorted on their popularity and how recent they have been updated.
