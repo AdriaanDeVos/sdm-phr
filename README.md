@@ -9,7 +9,7 @@ Provides an implementation of CP-ABE on the assignment for personal health recor
 ## Docker for Development
 1. For running and debugging our code you need to do this within the docker container as the libraries are otherwise not installed. Therefore we suggest using Pycharm Professional (available with a student license) and to use their docker integration. https://www.jetbrains.com/pycharm/download/
 2. Make sure to configure the docker integration so it can connect to the docker API: https://www.jetbrains.com/help/pycharm/docker-connection-settings.html
-3. Configure a remote interpreter to use the sdm:latest image: https://www.jetbrains.com/help/pycharm/using-docker-as-a-remote-interpreter.html
+3. Configure a remote interpreter to use the `sdm:latest` image and the `python3` interpreter: https://www.jetbrains.com/help/pycharm/using-docker-as-a-remote-interpreter.html
 
 For manual testing you could use shared folders: `docker run -it --mount type=bind,source="$(pwd)",target=/sdm-phr sdm`  
 If you are using a different operating system than linux you might have to change the `$(pwd)` to the source directory containg the code.  
