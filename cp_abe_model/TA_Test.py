@@ -7,8 +7,9 @@ from Crypto.Cipher import AES
 
 
 def main():
+    user_id = 0
     # SETUP TA
-    user_list = {0: ['ONE', 'TWO', 'THREE']}
+    user_list = {user_id: ['ONE', 'TWO', 'THREE']}
     attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
     ta = TAClass(attr_list, user_list)
 
@@ -16,7 +17,7 @@ def main():
     pairing_group = PairingGroup('MNT224')
     cpabe = BSW07(pairing_group, 2)
     public_key = ta.get_pk()
-    user_key = ta.key_request(0)
+    user_key = ta.key_request(user_id)
 
     # Encrypt Message (https://en.wikipedia.org/wiki/Hybrid_cryptosystem)
     policy_str = '((ONE and THREE) and (TWO OR FOUR))'
