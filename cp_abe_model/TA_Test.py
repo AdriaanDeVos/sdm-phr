@@ -1,5 +1,4 @@
 from charm.toolbox.pairinggroup import PairingGroup, GT
-from ABE.bsw07 import BSW07
 from TA import TAClass
 
 

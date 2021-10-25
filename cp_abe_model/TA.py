@@ -1,7 +1,7 @@
 from charm.toolbox.pairinggroup import PairingGroup, GT
 from ABE.bsw07 import BSW07
 
-
+# Trusted Authority Class
 class TAClass:
     # Hardcoded init
     __pairing_group = PairingGroup('MNT224')
@@ -14,6 +14,7 @@ class TAClass:
         self.__attr_list = attr_list
         self.__user_list = user_list
 
+    # Key creation for user class
     def __keygen(self, user_id):
         return self.__cpabe.keygen(self.__pk, self.msk, self.__user_list[user_id])
 
@@ -41,6 +42,7 @@ class TAClass:
         self.__files[file_id] = file
         return
 
+    # TODO: This allows for malicious key requests
     def key_request(self, user_id):
         if self.id_check(user_id):
             return self.__keygen(user_id)
