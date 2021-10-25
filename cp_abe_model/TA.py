@@ -7,6 +7,7 @@ class TAClass:
     __pairing_group = PairingGroup('MNT224')
     __cpabe = BSW07(__pairing_group, 2)
     (__pk, msk) = __cpabe.setup()
+    __files = {}
 
     # Variable init
     def __init__(self, attr_list, user_list):
@@ -26,12 +27,18 @@ class TAClass:
     def get_cp_abe(self):
         return self.__cpabe
 
-    # TODO
     def get_file(self, file_id):
-        return
+        if file_id in self.__files.keys():
+            return self.__files[file_id]
+        else:
+            return -1
 
-    # TODO
-    def upload_file(self, file):
+    def get_file_ids(self):
+        return self.__files.keys()
+
+    # TODO This allows for malicious uploads
+    def upload_file(self, file_id, file):
+        self.__files[file_id] = file
         return
 
     def key_request(self, user_id):

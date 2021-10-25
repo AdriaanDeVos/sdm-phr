@@ -22,12 +22,15 @@ def main():
     policy_str = '((ONE and THREE) and (TWO OR FOUR))'
     ctxt = cpabe.encrypt(pk, msg, policy_str)
 
-    # TODO "Upload" file from TA
+    file_name = "0_random_25/10/2021"
+    ta.upload_file(file_name, ctxt)
+    obtained_file_names = ta.get_file_ids()
+    print("file_name in ta.get_file_ids()?:", file_name in obtained_file_names)
 
-    # TODO "Download" file from TA
+    obtained_ct = ta.get_file(file_name)
 
     # Decrypt
-    rec_msg = cpabe.decrypt(pk, ctxt, key)
+    rec_msg = cpabe.decrypt(pk, obtained_ct, key)
     if rec_msg == msg:
         print("Successful decryption.")
     else:
