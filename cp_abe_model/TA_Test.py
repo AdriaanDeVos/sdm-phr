@@ -1,13 +1,18 @@
 import hashlib
+import base64
 
 from charm.toolbox.pairinggroup import PairingGroup, GT
 from TA import TAClass
+from phr_repo import PHRRepo
 from ABE.bsw07 import BSW07
 from Crypto.Cipher import AES
 
 
 def main():
     user_id = 0
+    # SETUP PHRRepo
+    repo = PHRRepo()
+
     # SETUP TA
     user_list = {user_id: ['ONE', 'TWO', 'THREE']}
     attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
@@ -30,16 +35,21 @@ def main():
     cipher = AES.new(encrypt_aes_key)
     ciphertext = cipher.encrypt(message)
 
-    # Upload Message
-    # TODO: Make sure both the encrypted text, and the encrypted key is uploaded and returned.
-    file_name = "0_random_25/10/2021"
-    ta.upload_file(file_name, ciphertext)
-    obtained_file_names = ta.get_file_ids()
-    print("file_name in ta.get_file_ids()?:", file_name in obtained_file_names)
+    # TODO ensure a correct textual format for sending this information as the original objects shouldn't be used...
+    encrypted_message = str(encrypted_group_element) + ";" + str(base64.b64encode(ciphertext))
 
-    obtained_ct = ta.get_file(file_name)
+    # Upload Message
+    upload_id = repo.upload_file(user_id, encrypted_message)
+    repo.test()
+    print(upload_id)
+
+    # Download Message
+    health_record = repo.download_single_record(upload_id).split(";")
+    abe_cipher = health_record[0]
+    aes_cipher = base64.b64decode(health_record[1])
 
     # Decrypt Message
+    # TODO update with retrieved ciphers instead of "saved" ciphers.
     decrypted_group_element = cpabe.decrypt(public_key, encrypted_group_element, user_key)
     decrypt_aes_key = hashlib.sha256(str(decrypted_group_element).encode('utf-8')).digest()
     plaintext = AES.new(decrypt_aes_key).decrypt(ciphertext).decode("utf-8")
