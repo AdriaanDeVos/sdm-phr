@@ -4,8 +4,8 @@ from TA import TAClass
 
 
 def main():
-    user_list = {0: ['ONE', 'TWO', 'THREE', 'FOUR']}
-    attr_list = ['ONE', 'TWO', 'THREE']
+    user_list = {0: ['ONE', 'TWO', 'THREE']}
+    attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
     ta = TAClass(attr_list, user_list)
     cpabe = ta.get_cp_abe()
 
