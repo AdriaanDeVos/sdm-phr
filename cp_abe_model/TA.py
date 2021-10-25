@@ -92,7 +92,3 @@ class TAClass:
         :return: A list of all possible attributes.
         """
         return self.__attr_list
-
-    # TODO MAG DEZE NAAR DE USERS?!!?? (Nee, ze moeten hun eigen instance opzetten)
-    def get_cp_abe(self):
-        return self.__cpabe
