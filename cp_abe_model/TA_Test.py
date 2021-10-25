@@ -1,5 +1,4 @@
 import hashlib
-
 from charm.toolbox.pairinggroup import PairingGroup, GT
 from TA import TAClass
 from ABE.bsw07 import BSW07
@@ -47,6 +46,7 @@ def main():
         print("Successful decryption.")
     else:
         print("Decryption failed.")
+
 
 if __name__ == "__main__":
     main()
