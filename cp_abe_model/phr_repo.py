@@ -4,18 +4,15 @@ import time
 class PHRRepo:
     __records = {}
 
-    def upload_file(self, user_id, file_content):
+    def upload_file(self, user_id, abe_cipher, aes_cipher):
         if self.__check_user_id(user_id):
             timestamp = int(time.time())
             if not self.__check_user_exists(user_id):
                 self.__records[user_id] = {}
-            self.__records[user_id][timestamp] = file_content
+            self.__records[user_id][timestamp] = {'abe': abe_cipher, 'aes': aes_cipher}
             return str(user_id) + ";" + str(timestamp)
         print("[ERROR] Inserting failed for personal health record repository.")
         return ""
-
-    def upload_ciphers(self, user_id, abe_cipher, aes_cipher):
-        return self.upload_file(user_id, abe_cipher + ';' + aes_cipher)
 
     def download_entire_user(self, user_id):
         if self.__check_user_exists(user_id):

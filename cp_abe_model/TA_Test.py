@@ -35,24 +35,20 @@ def main():
     cipher = AES.new(encrypt_aes_key)
     ciphertext = cipher.encrypt(message)
 
-    # TODO ensure a correct textual format for sending this information as the original objects shouldn't be used...
-    encrypted_message = str(encrypted_group_element) + ";" + str(base64.b64encode(ciphertext))
-
     # Upload Message
-    upload_id = repo.upload_file(user_id, encrypted_message)
+    upload_id = repo.upload_file(user_id, encrypted_group_element, ciphertext)
     repo.test()
     print(upload_id)
 
     # Download Message
-    health_record = repo.download_single_record(upload_id).split(";")
-    abe_cipher = health_record[0]
-    aes_cipher = base64.b64decode(health_record[1])
+    health_record = repo.download_single_record(upload_id)
+    abe_cipher = health_record['abe']
+    aes_cipher = health_record['aes']
 
     # Decrypt Message
-    # TODO update with retrieved ciphers instead of "saved" ciphers.
-    decrypted_group_element = cpabe.decrypt(public_key, encrypted_group_element, user_key)
+    decrypted_group_element = cpabe.decrypt(public_key, abe_cipher, user_key)
     decrypt_aes_key = hashlib.sha256(str(decrypted_group_element).encode('utf-8')).digest()
-    plaintext = AES.new(decrypt_aes_key).decrypt(ciphertext).decode("utf-8")
+    plaintext = AES.new(decrypt_aes_key).decrypt(aes_cipher).decode("utf-8")
 
     if plaintext == message:
         print("Successful decryption.")
