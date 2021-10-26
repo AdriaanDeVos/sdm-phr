@@ -1,5 +1,4 @@
 import hashlib
-
 from charm.toolbox.pairinggroup import PairingGroup, GT
 from TA import TAClass
 from phr_repo import PHRRepo
@@ -51,6 +50,7 @@ def main():
         print("Successful decryption.")
     else:
         print("Decryption failed.")
+
 
 if __name__ == "__main__":
     main()
