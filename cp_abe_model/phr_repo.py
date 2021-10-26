@@ -20,6 +20,12 @@ class PHRRepo:
         else:
             return {}
 
+    def get_ids_from_user(self, user_id):
+        if self.__check_user_exists(user_id):
+            return [f'{user_id};{k}' for k in self.__records[user_id].keys()]
+        else:
+            return {}
+
     def download_single_record(self, record_id):
         record_id = record_id.split(";")
         user_id = int(record_id[0])
@@ -43,6 +49,3 @@ class PHRRepo:
 
     def __check_user_exists(self, user_id):
         return user_id in self.__records.keys()
-
-    def test(self):
-        print(self.__records)

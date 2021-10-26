@@ -1,5 +1,4 @@
 import hashlib
-import base64
 
 from charm.toolbox.pairinggroup import PairingGroup, GT
 from TA import TAClass
@@ -37,8 +36,6 @@ def main():
 
     # Upload Message
     upload_id = repo.upload_file(user_id, encrypted_group_element, ciphertext)
-    repo.test()
-    print(upload_id)
 
     # Download Message
     health_record = repo.download_single_record(upload_id)
