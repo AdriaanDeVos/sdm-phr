@@ -8,6 +8,14 @@ class TestTA(unittest.TestCase):
     def setUp(self):
         self.ta = TA()
 
+    # TODO
+    def test_download_entire_user(self):
+        return
+
+    # TODO
+    def test_invalid_download_entire_user(self):
+        return
+
     def test_upload_file(self):
         policy = '(RELATED-TO-0 and PATIENT)'
         message = "dekatkraptdekrullenvandetrap"
@@ -65,7 +73,7 @@ class TestTA(unittest.TestCase):
         self.assertTrue(download_return is not message)
 
     # TODO
-    def download_entire_user(self):
+    def test_download_entire_user(self):
         return
 
     def test_get_ids_from_user(self):
@@ -77,7 +85,7 @@ class TestTA(unittest.TestCase):
         user0 = users[0]
         first_upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
         self.assertTrue(first_upload_return is not "")
-        time.sleep(1)
+        time.sleep(2)
         second_upload_return = user0.encrypt_and_send(user0.get_user_id(), message2, policy)
         self.assertTrue(second_upload_return is not "")
         user_file_ids = user0.file_server.get_ids_from_user(user0.get_user_id())
@@ -106,7 +114,7 @@ class TestTA(unittest.TestCase):
         download_return = user0.decrypt_from_send(upload_return)
         self.assertTrue(download_return == message)
 
-    def test_download_single_record(self):
+    def test_invalid_download_single_record(self):
         policy = '(RELATED-TO-0 and PATIENT)'
         message = "dekatkraptdekrullenvandetrap"
         user_role_amount = [1, 1, 1, 1, 1, 1]

@@ -8,6 +8,14 @@ class TestTA(unittest.TestCase):
     def setUp(self):
         self.ta = TA()
 
+    # TODO
+    def test_can_user_do_upload(self):
+        return
+
+    # TODO
+    def test_invalid_can_user_do_upload(self):
+        return
+
     def test_get_attributes(self):
         attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
         result = self.ta.get_attributes()
