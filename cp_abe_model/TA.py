@@ -49,21 +49,10 @@ class TA:
 
         user_id = len(self.__user_list)
         user = UserClass(user_id, role, self, self.__file_server)
-        user_attributes = []
+        user_attributes = [str(role.name)]
         if role is ROLE.PATIENT:
             related = 'RELATED-TO-' + str(user_id)
-            user_attributes = ['PATIENT', related]
-            self.__attr_list.append(related)
-        elif role is ROLE.HOSPITAL:
-            user_attributes = ['HOSPITAL']
-        elif role is ROLE.HEALTHCLUB:
-            user_attributes = ['HEALTHCLUB']
-        elif role is ROLE.DOCTOR:
-            user_attributes = ['DOCTOR']
-        elif role is ROLE.INSURANCE:
-            user_attributes = ['INSURANCE']
-        elif role is ROLE.EMPLOYER:
-            user_attributes = ['EMPLOYER']
+            user_attributes.append(related)
 
         self.__user_list[user_id] = [user, user_attributes]
         user.request_new_key()
