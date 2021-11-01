@@ -30,7 +30,7 @@ class PHRRepo:
             if not self.__ta.can_user_do_upload(user_id, patient_id):
                 print("[ERROR] User with id " + str(user_id) + " can not upload for patient: " + str(patient_id))
                 return ""
-            timestamp = int(time.time())
+            timestamp = int(round(time.time() * 1000))
             if not self.__check_user_exists(patient_id):
                 self.__records[patient_id] = {}
             self.__records[patient_id][timestamp] = {'abe': abe_cipher, 'aes': aes_cipher}
