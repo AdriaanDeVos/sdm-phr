@@ -9,7 +9,6 @@ class TestTA(unittest.TestCase):
         self.ta = TA()
 
     def test_get_attributes(self):
-        self.ta = TA()
         attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
         result = self.ta.get_attributes()
         self.assertIsNotNone(result)
