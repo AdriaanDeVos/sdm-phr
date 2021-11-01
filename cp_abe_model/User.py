@@ -46,7 +46,11 @@ class UserClass:
         """
         decrypted_group_element = self.__cpabe.decrypt(self.__public_key, abe_cipher, self.__user_key)
         decrypt_aes_key = hashlib.sha256(str(decrypted_group_element).encode('utf-8')).digest()
-        plaintext = AES.new(decrypt_aes_key).decrypt(aes_cipher).decode("utf-8")
+        try:
+            plaintext = AES.new(decrypt_aes_key).decrypt(aes_cipher).decode("utf-8")
+        except UnicodeDecodeError:
+            print("AES ERROR occurred, due to the policy not being satisfied.")
+            plaintext = ""
         return self.__remove_padding(plaintext)
 
     def encrypt_and_send(self, user_id, message, policy):
