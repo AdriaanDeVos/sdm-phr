@@ -13,8 +13,6 @@ class PHRRepo:
     def __init__(self, TA):
         self.__ta = TA
 
-    # TODO: Enable replacing records (with re-encrypted both ciphers)
-
     def upload_file(self, user_id, patient_id, abe_cipher, aes_cipher):
         """
         Upload a file and store the file in memory.

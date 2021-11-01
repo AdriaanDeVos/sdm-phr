@@ -91,7 +91,6 @@ class TA:
         print("[ERROR] Patient not found in user list with id: " + patient_id)
         return False
 
-    # TODO: Add ID check to prevent malicious key requests
     def key_request(self, user_id):
         """
         Generates and returns the key information for a specific user identifier.
