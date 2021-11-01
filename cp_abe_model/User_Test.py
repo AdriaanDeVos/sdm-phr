@@ -1,5 +1,5 @@
 from User import UserClass
-from TA import TAClass
+from TA import TA
 from Role import ROLE
 from phr_repo import PHRRepo
 
@@ -9,7 +9,7 @@ def main():
     user_object_list = []
     user_list = {0: ['ONE', 'TWO', 'THREE']}
     attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
-    ta = TAClass(attr_list, user_list)
+    ta = TA(attr_list, user_list)
     fs = PHRRepo()
 
     user_object_list.append(UserClass(0, ROLE(0), ta, fs))

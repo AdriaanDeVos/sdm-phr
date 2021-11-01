@@ -7,6 +7,7 @@ from Crypto.Cipher import AES
 class UserClass:
     __pairing_group = PairingGroup('MNT224')
     __cpabe = BSW07(__pairing_group, 2)
+    __user_key = ""
 
     def __init__(self, user_id, role, ta, fs):
         """
@@ -20,7 +21,6 @@ class UserClass:
         self.__role = role
         self.__ta = ta
         self.__public_key = ta.get_pk()
-        self.__user_key = ta.key_request(user_id)
         self.__file_server = fs
 
     def __encrypt_message(self, message, policy):
@@ -91,6 +91,14 @@ class UserClass:
         """
         spare_length = len(msg) % 16
         return msg + ("~" * (16 - spare_length))
+
+    def request_new_key(self):
+        """
+        When a patient provides an user with the attribute to see his/her files,
+        The user needs to req-request their keys so they can make use of this new permissions.
+        :return: None
+        """
+        self.__user_key = self.__ta.key_request(self.__user_id)
 
     def __remove_padding(self, msg):
         """
