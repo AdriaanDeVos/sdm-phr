@@ -69,6 +69,19 @@ class UserClass:
         health_record = self.__file_server.download_single_record(upload_id)
         return self.__decrypt_message(health_record['abe'], health_record['aes'])
 
+    def replace(self, user_id, file_name, new_policy):
+        """
+            Reupload a file present on the file server
+            :param user_id: Identifier representing a file on the file server.
+            :param file_name: Identifier of the file to be replaced
+            :param new_policy: The new policy to for the file
+            :return: The decrypted file
+        """
+        health_record = self.__file_server.download_single_record(file_name)
+        plain = self.__decrypt_message(health_record['abe'], health_record['aes'])
+        ct_elem, ct = self.__encrypt_message(plain, new_policy)
+        return self.__file_server.replace_file(user_id, file_name, ct_elem, ct)
+
     def get_user_id(self):
         """
             Get user_id.

@@ -33,6 +33,26 @@ class PHRRepo:
         print("[ERROR] Inserting failed for personal health record repository.")
         return ""
 
+    def replace_file(self, user_id, file_name, abe_cipher, aes_cipher):
+        """
+        Replace a file and store the file in memory.
+        Structure is: Dictionary with keys of userID containing
+        dictionaries with keys of timestamps containing single records.
+        {user_id: {timestamp: record}}
+        :param user_id: The identifier of the patient.
+        :param file_name: The identifier of the file.
+        :param abe_cipher: The output of abe_encrypt containing the encrypted group element.
+        :param aes_cipher: The output of aes_encrypt containing the encrypted record content.
+        :return: Return the record_id of the inserted record.
+        """
+        file_name_split = file_name.split(";")
+        if self.__check_user_id(user_id) and int(file_name_split[0]) == user_id:
+            timestamp = int(file_name_split[1])
+            self.__records[user_id][timestamp] = {'abe': abe_cipher, 'aes': aes_cipher}
+            return str(user_id) + ";" + str(timestamp)
+        print("[ERROR] Replacing failed for personal health record repository.")
+        return ""
+
     def download_entire_user(self, user_id):
         """
         Returns all records for a specific user_id.
