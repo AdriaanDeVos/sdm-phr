@@ -13,7 +13,6 @@ class TAClass:
     (__pk, __msk) = __cpabe.setup()
     __files = {}
 
-    # TODO Add new user (hospital/healthclub/insurer/etc)
     def __init__(self, attr_list, user_list):
         """
         Initializes the class based on given attribute and user lists.
@@ -38,6 +37,26 @@ class TAClass:
         :return: True/false if it exists.
         """
         return user_id in self.__user_list.keys()
+
+    def add_new_user(self, admin_id, user_attributes):
+        """
+        The user admin account with id -1 is able to add new users with defined user_attributes.
+        Currently, we do not support creating new patients as they require a new attribute.
+        :param admin_id:The admin account has user_id -1
+        :param user_attributes: List of attributes this user should have for his access policy
+        :return: the user identifier of the created user
+        """
+        if admin_id != -1:
+            print("[ERROR] Non-admin tried to create a new user.")
+            return
+        for attribute in user_attributes:
+            if attribute not in self.__attr_list:
+                print("[ERROR] Unable to create user with attribute: " + attribute)
+                return
+
+        user_id = len(self.__user_list)
+        self.__user_list[user_id] = user_attributes
+        return user_id
 
     def add_related_to_patient(self, patient_id, user_id):
         """
