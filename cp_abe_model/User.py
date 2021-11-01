@@ -21,7 +21,7 @@ class UserClass:
         self.__role = role
         self.__ta = ta
         self.__public_key = ta.get_pk()
-        self.__file_server = fs
+        self.file_server = fs
 
     def __encrypt_message(self, message, policy):
         """
@@ -62,7 +62,7 @@ class UserClass:
             :return: An identifier representing the uploaded file on the file server.
         """
         ct_elem, ct = self.__encrypt_message(message, policy)
-        return self.__file_server.upload_file(self.__user_id, patient_id, ct_elem, ct)
+        return self.file_server.upload_file(self.__user_id, patient_id, ct_elem, ct)
 
     def decrypt_from_send(self, upload_id):
         """
@@ -70,7 +70,7 @@ class UserClass:
             :param upload_id: Identifier representing a file on the file server.
             :return: The decrypted file
         """
-        health_record = self.__file_server.download_single_record(upload_id)
+        health_record = self.file_server.download_single_record(upload_id)
         return self.__decrypt_message(health_record['abe'], health_record['aes'])
 
     def replace(self, file_name, new_policy):
@@ -80,10 +80,10 @@ class UserClass:
             :param new_policy: The new policy to for the file
             :return: The decrypted file
         """
-        health_record = self.__file_server.download_single_record(file_name)
+        health_record = self.file_server.download_single_record(file_name)
         plain = self.__decrypt_message(health_record['abe'], health_record['aes'])
         ct_elem, ct = self.__encrypt_message(plain, new_policy)
-        return self.__file_server.replace_file(self.__user_id, file_name, ct_elem, ct)
+        return self.file_server.replace_file(self.__user_id, file_name, ct_elem, ct)
 
     def get_user_id(self):
         """
