@@ -69,23 +69,23 @@ class TA:
         user.request_new_key()
         return user
 
-    def add_related_to_patient(self, patient_id, user_id):
+    def add_related_to_patient(self, patient_id, target_user_id):
         """
         Provides functionality to add the `related_to_patient` permission to users.
         If the patient goes to a new doctor, he has to make sure this new doctor can read his records.
         :param patient_id: The user_id of the patient.
-        :param user_id: The user_id of the doctor/insurance/employer.
+        :param target_user_id: The user_id of the doctor/insurance/employer.
         :return: True/False if it worked.
         """
         patient = self.__user_list[patient_id][1]
         attribute = 'RELATED-TO-' + str(patient_id)
         if 'PATIENT' in patient and attribute in self.__attr_list:
-            user = self.__user_list[user_id][1]
+            user = self.__user_list[target_user_id][1]
             if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user:
                 user.append(attribute)
-                self.__user_list[user_id][0].request_new_key()
+                self.__user_list[target_user_id][0].request_new_key()
                 return True
-            print("[ERROR] User is not eligible to receive this permission with id: " + str(user_id))
+            print("[ERROR] User is not eligible to receive this permission with id: " + str(target_user_id))
         print("[ERROR] Patient not found in user list with id: " + patient_id)
         return False
 
