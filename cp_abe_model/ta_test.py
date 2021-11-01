@@ -72,6 +72,14 @@ class TestTA(unittest.TestCase):
         attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
         self.assertTrue(self.ta.get_attributes(), attr_list)
 
+    def test_get_attributes_add_patient(self):
+        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
+        self.assertTrue(self.ta.get_attributes(), attr_list)
+        user_role_amount = [1, 1, 1, 1, 1, 1]
+        users = self.ta.make_users(-1, user_role_amount)
+        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER', 'RELATED-TO-0']
+        self.assertTrue(self.ta.get_attributes(), attr_list)
+
 
 
 if __name__ == '__main__':
