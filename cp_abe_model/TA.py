@@ -55,7 +55,7 @@ class TA:
         if role is ROLE.PATIENT:
             related = 'RELATED-TO-' + str(user_id)
             user_attributes.append(related)
-
+            self.__attr_list.append(related)
         self.__user_list[user_id] = [user, user_attributes]
         user.request_new_key()
         return user

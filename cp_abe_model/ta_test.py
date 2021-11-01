@@ -14,7 +14,7 @@ class TestTA(unittest.TestCase):
         attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
         result = self.ta.get_attributes()
         self.assertIsNotNone(result)
-        self.assertTrue(len(result) == 7)
+        self.assertTrue(len(result) == 6)
 
     def test_add_user(self):
         self.ta.add_new_user(-1, ROLE(0))
