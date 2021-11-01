@@ -14,7 +14,6 @@ class TAClass:
     __files = {}
 
     # TODO Add new user (hospital/healthclub/insurer/etc)
-    # TODO Allow a patient to give (related_to_patient) access to an employer/etc
     def __init__(self, attr_list, user_list):
         """
         Initializes the class based on given attribute and user lists.
