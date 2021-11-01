@@ -12,9 +12,10 @@ def main():
     repo = PHRRepo()
 
     # SETUP TA
-    user_list = {user_id: ['ONE', 'TWO', 'THREE']}
-    attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
+    user_list = {user_id: ['PATIENT', 'RELATED-TO-0'], 1: ['DOCTOR']}
+    attr_list = ['PATIENT', 'RELATED-TO-0', 'DOCTOR']
     ta = TAClass(attr_list, user_list)
+    ta.add_related_to_patient(0, 1)
 
     # SETUP USER
     pairing_group = PairingGroup('MNT224')
@@ -23,7 +24,7 @@ def main():
     user_key = ta.key_request(user_id)
 
     # Encrypt Message (https://en.wikipedia.org/wiki/Hybrid_cryptosystem)
-    policy_str = '((ONE and THREE) and (TWO OR FOUR))'
+    policy_str = '(RELATED-TO-0 and (PATIENT OR DOCTOR))'
     random_group_element = pairing_group.random(GT)
     message = "testtesttesttest"
 
