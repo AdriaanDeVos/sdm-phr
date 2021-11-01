@@ -8,20 +8,25 @@ def main():
     print("Starting main program...")
     user_object_list = []
     user_role_amount = [2, 3, 2, 0, 4, 0]
-    user_list = {0: ['ONE', 'TWO', 'THREE']}
-    attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
+    user_list = {}
+    attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', "INSURANCE", "EMPLOYER"]
     for i in range(user_role_amount[0]):
-        attr_list.append("RELATED_TO_"+str(i))
+        attr_list.append("RELATED-TO-"+str(i))
+    for i in range(len(user_role_amount)):
+        for j in range(user_role_amount[i]):
+            user_list[len(user_list)] = [attr_list[i]]
+            if i == 0:
+                pat_id = len(user_list)-1
+                new_attr = "RELATED-TO-"+str(pat_id)
+                user_list[pat_id] = user_list[pat_id] + [new_attr]
+    print(user_list)
     ta = TAClass(attr_list, user_list)
     fs = PHRRepo()
 
     for i in range(len(user_role_amount)):
         user_object_list = user_object_list + make_users(len(user_object_list), ROLE(i), ta, fs, user_role_amount[i])
 
-    #for user in user_object_list:
-    #    print(str(user.get_user_id()) + " " + str(user.get_role()))
-
-    policy = '((ONE and THREE) and (TWO OR FOUR))'
+    policy = '((RELATED-TO-0 and (PATIENT OR DOCTOR)))'
     message = "dekatkraptdekrullenvandetrap"
     print("Encrypting file...")
     file_id = user_object_list[0].encrypt_and_send(user_object_list[0].get_user_id(), message, policy)
