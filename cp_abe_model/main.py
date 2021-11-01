@@ -10,6 +10,8 @@ def main():
     user_role_amount = [2, 3, 2, 0, 4, 0]
     user_list = {0: ['ONE', 'TWO', 'THREE']}
     attr_list = ['ONE', 'TWO', 'THREE', 'FOUR']
+    for i in range(user_role_amount[0]):
+        attr_list.append("RELATED_TO_"+str(i))
     ta = TAClass(attr_list, user_list)
     fs = PHRRepo()
 
