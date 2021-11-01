@@ -1,4 +1,5 @@
 import unittest
+import warnings
 from TA import TA
 from Role import ROLE
 
@@ -7,6 +8,13 @@ class TestTA(unittest.TestCase):
 
     def setUp(self):
         self.ta = TA()
+
+    def test_get_attributes(self):
+        self.ta = TA()
+        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
+        result = self.ta.get_attributes()
+        self.assertIsNotNone(result)
+        self.assertTrue(len(result) == 7)
 
     def test_add_user(self):
         self.ta.add_new_user(-1, ROLE(0))
@@ -68,19 +76,14 @@ class TestTA(unittest.TestCase):
         self.assertIsNotNone(pk)
         self.assertTrue(type(pk) is dict)
 
-    def test_get_attributes(self):
-        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
-        self.assertTrue(self.ta.get_attributes(), attr_list)
-
     def test_get_attributes_add_patient(self):
-        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
-        self.assertTrue(self.ta.get_attributes(), attr_list)
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
         attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER', 'RELATED-TO-0']
-        self.assertTrue(self.ta.get_attributes(), attr_list)
-
+        self.assertTrue(self.ta.get_attributes() == attr_list)
 
 
 if __name__ == '__main__':
-    unittest.main()
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', category=ImportWarning)
+        unittest.main()
