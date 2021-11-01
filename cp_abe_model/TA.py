@@ -15,7 +15,6 @@ class TAClass:
 
     # TODO Add new user (hospital/healthclub/insurer/etc)
     # TODO Allow a patient to give (related_to_patient) access to an employer/etc
-
     def __init__(self, attr_list, user_list):
         """
         Initializes the class based on given attribute and user lists.
@@ -40,6 +39,25 @@ class TAClass:
         :return: True/false if it exists.
         """
         return user_id in self.__user_list.keys()
+
+    def add_related_to_patient(self, patient_id, user_id):
+        """
+        Provides functionality to add the `related_to_patient` permission to users.
+        If the patient goes to a new doctor, he has to make sure this new doctor can read his records.
+        :param patient_id: The user_id of the patient.
+        :param user_id: The user_id of the doctor/insurance/employer.
+        :return: True/False if it worked.
+        """
+        patient = self.__user_list[patient_id]
+        attribute = 'RELATED-TO-' + str(patient_id)
+        if 'PATIENT' in patient and attribute in self.__attr_list:
+            user = self.__user_list[user_id]
+            if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user:
+                user.append(attribute)
+                return True
+            print("[ERROR] User is not eligible to receive this permission with id: " + patient_id)
+        print("[ERROR] Patient not found in user list with id: " + patient_id)
+        return False
 
     # TODO: Add ID check to prevent malicious key requests
     def key_request(self, user_id):
