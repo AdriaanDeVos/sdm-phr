@@ -69,6 +69,14 @@ class TA:
         user.request_new_key()
         return user
 
+    def make_users(self, admin_id, user_role_amount):
+        users = []
+        if admin_id == -1:
+            for i in range(len(user_role_amount)):
+                for j in range(user_role_amount[i]):
+                    users.append(self.add_new_user(-1, ROLE(i)))
+        return users
+
     def add_related_to_patient(self, patient_id, target_user_id):
         """
         Provides functionality to add the `related_to_patient` permission to users.
@@ -86,7 +94,7 @@ class TA:
                 self.__user_list[target_user_id][0].request_new_key()
                 return True
             print("[ERROR] User is not eligible to receive this permission with id: " + str(target_user_id))
-        print("[ERROR] Patient not found in user list with id: " + patient_id)
+        print("[ERROR] Patient not found in user list with id: " + str(patient_id))
         return False
 
     # TODO: Add ID check to prevent malicious key requests
