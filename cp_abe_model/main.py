@@ -7,7 +7,7 @@ from phr_repo import PHRRepo
 def main():
     print("Starting main program...")
     user_object_list = []
-    user_role_amount = [2, 3, 2, 0, 4, 0]
+    user_role_amount = [2, 3, 2, 1, 4, 0]
     user_list = {}
     attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', "INSURANCE", "EMPLOYER"]
     for i in range(user_role_amount[0]):
@@ -26,7 +26,7 @@ def main():
     for i in range(len(user_role_amount)):
         user_object_list = user_object_list + make_users(len(user_object_list), ROLE(i), ta, fs, user_role_amount[i])
 
-    policy = '((RELATED-TO-0 and (PATIENT OR DOCTOR)))'
+    policy = '(RELATED-TO-0 and PATIENT)'
     message = "dekatkraptdekrullenvandetrap"
     print("Encrypting file...")
     file_id = user_object_list[0].encrypt_and_send(user_object_list[0].get_user_id(), message, policy)
