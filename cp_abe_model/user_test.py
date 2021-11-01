@@ -8,25 +8,7 @@ class TestTA(unittest.TestCase):
     def setUp(self):
         self.ta = TA()
 
-    def test_get_attributes(self):
-        self.ta = TA()
-        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
-        result = self.ta.get_attributes()
-        self.assertIsNotNone(result)
-        self.assertTrue(len(result) == 6)
-
-    def test_add_user(self):
-        self.ta.add_new_user(-1, ROLE(0))
-        key = self.ta.key_request(0)
-        self.assertIsNotNone(key)
-        self.assertTrue(type(key) is dict)
-
-    def test_user_init_length(self):
-        user_role_amount = [1, 1, 1, 1, 1, 1]
-        users = self.ta.make_users(-1, user_role_amount)
-        self.assertEqual(len(users), 6)
-
-    def test_user_init_role(self):
+    def test_get_role(self):
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
         for i in range(len(users)):
@@ -38,49 +20,94 @@ class TestTA(unittest.TestCase):
         for i in range(len(users)):
             self.assertTrue(users[i].get_role(), i)
 
-    def test_related_to_patient_doctor(self):
+    def test_encrypt_and_send(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekatkraptdekrullenvandetrap"
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
-        self.assertTrue(self.ta.add_related_to_patient(0, 3))
+        user0 = users[0]
+        upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        self.assertTrue(upload_return is not "")
 
-    def test_related_to_patient_insurance(self):
+    def test_invalid_encrypt_and_send(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekatkraptdekrullenvandetrap"
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
-        self.assertTrue(self.ta.add_related_to_patient(0, 4))
+        user3 = users[3]
+        upload_return = user3.encrypt_and_send(users[0].get_user_id(), message, policy)
+        self.assertTrue(upload_return is "")
 
-    def test_related_to_patient_employer(self):
+    def test_decrypt_from_send(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekatkraptdekrullenvandetrap"
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
-        self.assertTrue(self.ta.add_related_to_patient(0, 5))
+        user0 = users[0]
+        upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        self.assertTrue(upload_return is not "")
+        download_return = user0.decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
 
-    def test_invalid_related_to_patient(self):
+    def test_invalid_decrypt_from_send(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekatkraptdekrullenvandetrap"
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
-        self.assertFalse(self.ta.add_related_to_patient(3, 1))
+        user0 = users[0]
+        upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        self.assertTrue(upload_return is not "")
+        download_return = users[3].decrypt_from_send(upload_return)
+        self.assertTrue(download_return is not message)
 
-    def test_key_request(self):
+    def test_padding(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekat"
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
-        key = self.ta.key_request(0)
-        self.assertIsNotNone(key)
-        self.assertTrue(type(key) is dict)
+        user0 = users[0]
+        upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        self.assertTrue(upload_return is not "")
+        download_return = user0.decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
 
-    def test_invalid_key_request(self):
-        key = self.ta.key_request(0)
-        self.assertIsNotNone(key)
-        self.assertIs(key, -1)
-
-    def test_get_pk(self):
-        pk = self.ta.get_pk()
-        self.assertIsNotNone(pk)
-        self.assertTrue(type(pk) is dict)
-
-    def test_get_attributes_add_patient(self):
+    def test_replace(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        new_policy = '(RELATED-TO-0 and (PATIENT or DOCTOR))'
+        message = "dekatkraptdekrullenvandetrap"
         user_role_amount = [1, 1, 1, 1, 1, 1]
         users = self.ta.make_users(-1, user_role_amount)
-        attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER', 'RELATED-TO-0']
-        self.assertTrue(self.ta.get_attributes() == attr_list)
+        user0 = users[0]
+        self.ta.add_related_to_patient(user0.get_user_id(), users[3].get_user_id())
+        upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        self.assertTrue(upload_return is not "")
+        download_return = user0.decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
+        replace_return = user0.replace(upload_return, new_policy)
+        self.assertTrue(replace_return is not "")
+        download_return = user0.decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
+        download_return = users[3].decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
 
+    def test_invalid_replace(self):
+        policy = '(RELATED-TO-0 and PATIENT)'
+        new_policy = '(RELATED-TO-0 and (PATIENT or INSURANCE))'
+        message = "dekatkraptdekrullenvandetrap"
+        user_role_amount = [1, 1, 1, 1, 1, 1]
+        users = self.ta.make_users(-1, user_role_amount)
+        user0 = users[0]
+        self.ta.add_related_to_patient(user0.get_user_id(), users[3].get_user_id())
+        upload_return = user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        self.assertTrue(upload_return is not "")
+        download_return = user0.decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
+        replace_return = user0.replace(upload_return, new_policy)
+        self.assertTrue(replace_return is not "")
+        download_return = user0.decrypt_from_send(upload_return)
+        self.assertTrue(download_return == message)
+        download_return = users[3].decrypt_from_send(upload_return)
+        self.assertTrue(download_return is not message)
 
 if __name__ == '__main__':
     unittest.main()
