@@ -53,16 +53,16 @@ class UserClass:
             plaintext = ""
         return self.__remove_padding(plaintext)
 
-    def encrypt_and_send(self, user_id, message, policy):
+    def encrypt_and_send(self, patient_id, message, policy):
         """
             Encrypt a message, and send to the file server.
-            :param user_id: An int identifying the User.
+            :param patient_id: An int identifying the target patient record.
             :param message: The message to be encrypted.
             :param policy: The policy which determines who can decrypt.
             :return: An identifier representing the uploaded file on the file server.
         """
         ct_elem, ct = self.__encrypt_message(message, policy)
-        return self.__file_server.upload_file(user_id, ct_elem, ct)
+        return self.__file_server.upload_file(self.__user_id, patient_id, ct_elem, ct)
 
     def decrypt_from_send(self, upload_id):
         """
@@ -73,10 +73,9 @@ class UserClass:
         health_record = self.__file_server.download_single_record(upload_id)
         return self.__decrypt_message(health_record['abe'], health_record['aes'])
 
-    def replace(self, user_id, file_name, new_policy):
+    def replace(self, file_name, new_policy):
         """
-            Reupload a file present on the file server
-            :param user_id: Identifier representing a file on the file server.
+            Reupload a file present on the file server.
             :param file_name: Identifier of the file to be replaced
             :param new_policy: The new policy to for the file
             :return: The decrypted file
@@ -84,7 +83,7 @@ class UserClass:
         health_record = self.__file_server.download_single_record(file_name)
         plain = self.__decrypt_message(health_record['abe'], health_record['aes'])
         ct_elem, ct = self.__encrypt_message(plain, new_policy)
-        return self.__file_server.replace_file(user_id, file_name, ct_elem, ct)
+        return self.__file_server.replace_file(self.__user_id, file_name, ct_elem, ct)
 
     def get_user_id(self):
         """

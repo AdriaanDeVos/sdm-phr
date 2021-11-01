@@ -15,9 +15,11 @@ class TA:
     __cpabe = BSW07(__pairing_group, 2)
     (__pk, __msk) = __cpabe.setup()
 
-    __file_server = PHRRepo()
     __attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
     __user_list = {}
+
+    def __init__(self):
+        self.__file_server = PHRRepo(self)
 
     def __keygen(self, user_id):
         """
@@ -100,6 +102,27 @@ class TA:
             return self.__keygen(user_id)
         else:
             return -1
+
+    def can_user_do_upload(self, user_id, patient_id):
+        """
+        Checks if the given user is allowed to upload.
+        An user can upload if:
+        - It is an PATIENT/HOSPITAL/HEALTHCLUB
+        - It has the RELATED-TO-{patient_id} attribute
+        :param user_id: The user that wants to upload.
+        :param patient_id: The patient of the record that is being uploaded.
+        :return: True/False depending on if the user is allowed.
+        """
+        if user_id >= len(self.__user_list):
+            return False
+        patient_related = 'RELATED-TO-' + str(patient_id)
+
+        res = 'PATIENT' in self.__user_list[user_id][1]
+        res = res or 'HOSPITAL' in self.__user_list[user_id][1]
+        res = res or 'HEALTHCLUB' in self.__user_list[user_id][1]
+        res = res and patient_related in self.__user_list[user_id][1]
+
+        return res
 
     def get_pk(self):
         """
