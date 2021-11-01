@@ -16,8 +16,10 @@ class TA:
     (__pk, __msk) = __cpabe.setup()
 
     __file_server = PHRRepo()
-    __attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
-    __user_list = {}
+
+    def __init__(self):
+        self.__attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
+        self.__user_list = {}
 
     def __keygen(self, user_id):
         """
