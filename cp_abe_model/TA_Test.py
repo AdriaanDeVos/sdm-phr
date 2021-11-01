@@ -1,9 +1,10 @@
 import hashlib
 from charm.toolbox.pairinggroup import PairingGroup, GT
-from TA import TAClass
+from TA import TA
 from phr_repo import PHRRepo
 from ABE.bsw07 import BSW07
 from Crypto.Cipher import AES
+from Role import ROLE
 
 
 def main():
@@ -12,11 +13,10 @@ def main():
     repo = PHRRepo()
 
     # SETUP TA
-    user_list = {user_id: ['PATIENT', 'RELATED-TO-0'], 1: ['DOCTOR']}
-    attr_list = ['PATIENT', 'RELATED-TO-0', 'DOCTOR']
-    ta = TAClass(attr_list, user_list)
+    ta = TA()
+    ta.add_new_user(-1, ROLE.PATIENT)
+    ta.add_new_user(-1, ROLE.DOCTOR)
     ta.add_related_to_patient(0, 1)
-    ta.add_new_user(-1, ['DOCTOR'])
 
     # SETUP USER
     pairing_group = PairingGroup('MNT224')

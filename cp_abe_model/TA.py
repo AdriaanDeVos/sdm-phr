@@ -1,8 +1,11 @@
 from charm.toolbox.pairinggroup import PairingGroup
 from ABE.bsw07 import BSW07
+from phr_repo import PHRRepo
+from Role import ROLE
+from User import UserClass
 
 # Trusted Authority Class
-class TAClass:
+class TA:
     """
     Trusted Authority Wrapper on the CP-ABE library.
     Initializes the private variables of this class.
@@ -11,16 +14,10 @@ class TAClass:
     __pairing_group = PairingGroup('MNT224')
     __cpabe = BSW07(__pairing_group, 2)
     (__pk, __msk) = __cpabe.setup()
-    __files = {}
 
-    def __init__(self, attr_list, user_list):
-        """
-        Initializes the class based on given attribute and user lists.
-        :param attr_list: A list containing all possible attributes.
-        :param user_list: A nested list containing the attributes of a specific user.
-        """
-        self.__attr_list = attr_list
-        self.__user_list = user_list
+    __file_server = PHRRepo()
+    __attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
+    __user_list = {}
 
     def __keygen(self, user_id):
         """
@@ -28,7 +25,7 @@ class TAClass:
         :param user_id: An identifier for the user.
         :return: An attribute list, master key and subkeys.
         """
-        return self.__cpabe.keygen(self.__pk, self.__msk, self.__user_list[user_id])
+        return self.__cpabe.keygen(self.__pk, self.__msk, self.__user_list[user_id][1])
 
     def __id_check(self, user_id):
         """
@@ -38,25 +35,39 @@ class TAClass:
         """
         return user_id in self.__user_list.keys()
 
-    def add_new_user(self, admin_id, user_attributes):
+    def add_new_user(self, admin_id, role):
         """
-        The user admin account with id -1 is able to add new users with defined user_attributes.
-        Currently, we do not support creating new patients as they require a new attribute.
-        :param admin_id:The admin account has user_id -1
-        :param user_attributes: List of attributes this user should have for his access policy
-        :return: the user identifier of the created user
+        The user admin account with id -1 is able to add new users with different roles.
+        For new patients an additional attribute needs to be added too.
+        :param admin_id: The admin account has user_id -1.
+        :param role: The role of this user.
+        :return: The user identifier of the created user.
         """
         if admin_id != -1:
             print("[ERROR] Non-admin tried to create a new user.")
             return
-        for attribute in user_attributes:
-            if attribute not in self.__attr_list:
-                print("[ERROR] Unable to create user with attribute: " + attribute)
-                return
 
         user_id = len(self.__user_list)
-        self.__user_list[user_id] = user_attributes
-        return user_id
+        user = UserClass(user_id, role, self, self.__file_server)
+        user_attributes = []
+        if role is ROLE.PATIENT:
+            related = 'RELATED-TO-' + str(user_id)
+            user_attributes = ['PATIENT', related]
+            self.__attr_list.append(related)
+        elif role is ROLE.HOSPITAL:
+            user_attributes = ['HOSPITAL']
+        elif role is ROLE.HEALTHCLUB:
+            user_attributes = ['HEALTHCLUB']
+        elif role is ROLE.DOCTOR:
+            user_attributes = ['DOCTOR']
+        elif role is ROLE.INSURANCE:
+            user_attributes = ['INSURANCE']
+        elif role is ROLE.EMPLOYER:
+            user_attributes = ['EMPLOYER']
+
+        self.__user_list[user_id] = [user, user_attributes]
+        user.request_new_key()
+        return user
 
     def add_related_to_patient(self, patient_id, user_id):
         """
@@ -66,14 +77,15 @@ class TAClass:
         :param user_id: The user_id of the doctor/insurance/employer.
         :return: True/False if it worked.
         """
-        patient = self.__user_list[patient_id]
+        patient = self.__user_list[patient_id][1]
         attribute = 'RELATED-TO-' + str(patient_id)
         if 'PATIENT' in patient and attribute in self.__attr_list:
-            user = self.__user_list[user_id]
+            user = self.__user_list[user_id][1]
             if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user:
                 user.append(attribute)
+                self.__user_list[user_id][0].request_new_key()
                 return True
-            print("[ERROR] User is not eligible to receive this permission with id: " + patient_id)
+            print("[ERROR] User is not eligible to receive this permission with id: " + str(user_id))
         print("[ERROR] Patient not found in user list with id: " + patient_id)
         return False
 
@@ -88,35 +100,6 @@ class TAClass:
             return self.__keygen(user_id)
         else:
             return -1
-
-    # TODO Add ID check to prevent malicious uploads
-    def upload_file(self, file_id, file):
-        """
-        Saves the file content and identifier.
-        :param file_id: An identifier for the uploaded file
-        :param file: The content of the uploaded file
-        """
-        self.__files[file_id] = file
-
-    def get_file(self, file_id):
-        """
-        Returns the content of a specific file identifier.
-        If it doesnt exist, throw an error and return -1
-        :param file_id: An identifier for the file.
-        :return: The file content, or -1 if it doesnt exist.
-        """
-        if file_id in self.__files.keys():
-            return self.__files[file_id]
-        else:
-            print("[ERROR] File not found with ID", file_id)
-            return -1
-
-    def get_file_ids(self):
-        """
-        Get a list of all uploaded file identifiers.
-        :return: a list of all uploaded file identifiers.
-        """
-        return self.__files.keys()
 
     def get_pk(self):
         """
