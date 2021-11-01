@@ -16,6 +16,7 @@ def main():
     attr_list = ['PATIENT', 'RELATED-TO-0', 'DOCTOR']
     ta = TAClass(attr_list, user_list)
     ta.add_related_to_patient(0, 1)
+    ta.add_new_user(-1, ['DOCTOR'])
 
     # SETUP USER
     pairing_group = PairingGroup('MNT224')
