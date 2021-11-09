@@ -1,5 +1,5 @@
 from charm.toolbox.pairinggroup import PairingGroup
-from ABE.bsw07 import BSW07
+from ABE.ac17 import AC17CPABE
 from phr_repo import PHRRepo
 from Role import ROLE
 from User import UserClass
@@ -12,7 +12,7 @@ class TA:
     Provides various functions for setup/encryption/decryption.
     """
     __pairing_group = PairingGroup('MNT224')
-    __cpabe = BSW07(__pairing_group, 2)
+    __cpabe = AC17CPABE(__pairing_group, 2)
     (__pk, __msk) = __cpabe.setup()
 
     __attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']

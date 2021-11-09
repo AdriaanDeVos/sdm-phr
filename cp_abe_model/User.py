@@ -1,12 +1,12 @@
 import hashlib
 from charm.toolbox.pairinggroup import PairingGroup, GT
-from ABE.bsw07 import BSW07
+from ABE.ac17 import AC17CPABE
 from Crypto.Cipher import AES
 
 
 class UserClass:
     __pairing_group = PairingGroup('MNT224')
-    __cpabe = BSW07(__pairing_group, 2)
+    __cpabe = AC17CPABE(__pairing_group, 2)
     __user_key = ""
 
     def __init__(self, user_id, role, ta, fs):
