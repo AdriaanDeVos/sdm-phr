@@ -109,5 +109,6 @@ class TestTA(unittest.TestCase):
         download_return = users[3].decrypt_from_send(upload_return)
         self.assertTrue(download_return is not message)
 
+
 if __name__ == '__main__':
     unittest.main()
