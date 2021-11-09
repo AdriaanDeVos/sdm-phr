@@ -71,7 +71,7 @@ class PHRRepo:
         if self.__check_user_exists(user_id):
             return self.__records[user_id]
         else:
-            return []
+            return {}
 
     def get_ids_from_user(self, user_id):
         """

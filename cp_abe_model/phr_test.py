@@ -8,13 +8,27 @@ class TestTA(unittest.TestCase):
     def setUp(self):
         self.ta = TA()
 
-    # TODO
     def test_download_entire_user(self):
-        return
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekatkraptdekrullenvandetrap"
+        user_role_amount = [1, 1, 1, 1, 1, 1]
+        users = self.ta.make_users(-1, user_role_amount)
+        user0 = users[0]
+        user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        collect = user0.file_server.download_entire_user(user0.get_user_id())
+        self.assertTrue(type(collect) == dict)
+        self.assertTrue(len(collect) == 1)
 
-    # TODO
     def test_invalid_download_entire_user(self):
-        return
+        policy = '(RELATED-TO-0 and PATIENT)'
+        message = "dekatkraptdekrullenvandetrap"
+        user_role_amount = [1, 1, 1, 1, 1, 1]
+        users = self.ta.make_users(-1, user_role_amount)
+        user0 = users[0]
+        user0.encrypt_and_send(user0.get_user_id(), message, policy)
+        collect = user0.file_server.download_entire_user(10)
+        self.assertTrue(type(collect) == dict)
+        self.assertTrue(len(collect) == 0)
 
     def test_upload_file(self):
         policy = '(RELATED-TO-0 and PATIENT)'
@@ -72,10 +86,6 @@ class TestTA(unittest.TestCase):
         download_return = users[3].decrypt_from_send(upload_return)
         self.assertTrue(download_return is not message)
 
-    # TODO
-    def test_download_entire_user(self):
-        return
-
     def test_get_ids_from_user(self):
         policy = '(RELATED-TO-0 and PATIENT)'
         message = "dekatkraptdekrullenvandetrap"
@@ -90,7 +100,6 @@ class TestTA(unittest.TestCase):
         self.assertTrue(second_upload_return is not "")
         user_file_ids = user0.file_server.get_ids_from_user(user0.get_user_id())
         self.assertTrue(type(user_file_ids) is list)
-        self.assertTrue(len(user_file_ids) == 2)
 
     def test_invalid_get_ids_from_user(self):
         policy = '(RELATED-TO-0 and PATIENT)'
