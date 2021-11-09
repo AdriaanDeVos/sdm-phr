@@ -8,19 +8,28 @@ class TestTA(unittest.TestCase):
     def setUp(self):
         self.ta = TA()
 
-    # TODO
     def test_can_user_do_upload(self):
-        return
+        user_role_amount = [1, 1, 1, 1, 1, 1]
+        users = self.ta.make_users(-1, user_role_amount)
+        self.ta.add_related_to_patient(users[0].get_user_id(), users[1].get_user_id())
+        result = self.ta.can_user_do_upload(users[0].get_user_id(), users[0].get_user_id())
+        self.assertTrue(result)
+        result2 = self.ta.can_user_do_upload(users[1].get_user_id(), users[0].get_user_id())
+        print(result2)
+        self.assertTrue(result2)
 
-    # TODO
     def test_invalid_can_user_do_upload(self):
-        return
+        user_role_amount = [1, 1, 1, 1, 1, 1]
+        self.ta.make_users(-1, user_role_amount)
+        result = self.ta.can_user_do_upload(0, 0)
+        self.assertFalse(result)
 
     def test_get_attributes(self):
         attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
         result = self.ta.get_attributes()
         self.assertIsNotNone(result)
         self.assertTrue(len(result) == 6)
+        self.assertTrue(result == attr_list)
 
     def test_add_user(self):
         self.ta.add_new_user(-1, ROLE(0))

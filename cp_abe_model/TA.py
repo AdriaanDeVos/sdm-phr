@@ -79,7 +79,7 @@ class TA:
         attribute = 'RELATED-TO-' + str(patient_id)
         if 'PATIENT' in patient and attribute in self.__attr_list:
             user = self.__user_list[target_user_id][1]
-            if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user:
+            if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user or 'HOSPITAL' in user or 'HEALTHCLUB' in user:
                 user.append(attribute)
                 self.__user_list[target_user_id][0].request_new_key()
                 return True
