@@ -15,12 +15,11 @@ class TA:
     __cpabe = AC17CPABE(__pairing_group, 2)
     (__pk, __msk) = __cpabe.setup()
 
-    __attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
-    __user_list = {}
-
     def __init__(self):
+        self.__attr_list = ['PATIENT', 'HOSPITAL', 'HEALTH_CLUB', 'DOCTOR', 'INSURANCE', 'EMPLOYER']
+        self.__user_list = {}
         self.__file_server = PHRRepo(self)
-
+        
     def __keygen(self, user_id):
         """
         Generate a key based on the set of attributes from a specific user.
@@ -51,25 +50,22 @@ class TA:
 
         user_id = len(self.__user_list)
         user = UserClass(user_id, role, self, self.__file_server)
-        user_attributes = []
+        user_attributes = [str(role.name)]
         if role is ROLE.PATIENT:
             related = 'RELATED-TO-' + str(user_id)
-            user_attributes = ['PATIENT', related]
+            user_attributes.append(related)
             self.__attr_list.append(related)
-        elif role is ROLE.HOSPITAL:
-            user_attributes = ['HOSPITAL']
-        elif role is ROLE.HEALTHCLUB:
-            user_attributes = ['HEALTHCLUB']
-        elif role is ROLE.DOCTOR:
-            user_attributes = ['DOCTOR']
-        elif role is ROLE.INSURANCE:
-            user_attributes = ['INSURANCE']
-        elif role is ROLE.EMPLOYER:
-            user_attributes = ['EMPLOYER']
-
         self.__user_list[user_id] = [user, user_attributes]
         user.request_new_key()
         return user
+
+    def make_users(self, admin_id, user_role_amount):
+        users = []
+        if admin_id == -1:
+            for i in range(len(user_role_amount)):
+                for j in range(user_role_amount[i]):
+                    users.append(self.add_new_user(-1, ROLE(i)))
+        return users
 
     def add_related_to_patient(self, patient_id, target_user_id):
         """
@@ -83,12 +79,12 @@ class TA:
         attribute = 'RELATED-TO-' + str(patient_id)
         if 'PATIENT' in patient and attribute in self.__attr_list:
             user = self.__user_list[target_user_id][1]
-            if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user:
+            if 'DOCTOR' in user or 'INSURANCE' in user or 'EMPLOYER' in user or 'HOSPITAL' in user or 'HEALTHCLUB' in user:
                 user.append(attribute)
                 self.__user_list[target_user_id][0].request_new_key()
                 return True
             print("[ERROR] User is not eligible to receive this permission with id: " + str(target_user_id))
-        print("[ERROR] Patient not found in user list with id: " + patient_id)
+        print("[ERROR] Patient not found in user list with id: " + str(patient_id))
         return False
 
     def key_request(self, user_id):
