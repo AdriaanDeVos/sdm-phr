@@ -88,7 +88,7 @@ class TA:
                 self.__user_list[target_user_id][0].request_new_key()
                 return True
             print("[ERROR] User is not eligible to receive this permission with id: " + str(target_user_id))
-        print("[ERROR] Patient not found in user list with id: " + patient_id)
+        print("[ERROR] Patient not found in user list with id: " + str(patient_id))
         return False
 
     def key_request(self, user_id):
