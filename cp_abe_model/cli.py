@@ -88,6 +88,7 @@ def user_actions(user):
         if user.get_role().name == 'PATIENT':
             print("3) Provide read access to your health records")
             print("4) Provide write access to your health records")
+            print("5) Change access policy of exiting record")
         choice = input()
         if choice == "0":
             return
@@ -99,6 +100,8 @@ def user_actions(user):
             grant_read_access(user)
         elif choice == "4":
             grant_write_access(user)
+        elif choice == "5":
+            change_access_policy(user)
         else:
             print("Input not recognized, please try again.")
 
@@ -243,6 +246,38 @@ def grant_write_access(user):
                 print("Write access has been granted!")
             else:
                 print("Write access could not be granted!")
+            return
+        else:
+            print("Input not recognized, please try again.")
+
+def change_access_policy(user):
+    """
+    This function allows a patient to change the access policy of his health records.
+    :param user: The user that is changing the access policy.
+    :return: None
+    """
+    print("\n=============================================")
+    print("  Changing access policy of your health records")
+    print("=============================================")
+
+    files = user.file_server.get_ids_from_user(user.get_user_id())
+    while True:
+        print("Please choose the record you want to edit:")
+        if len(files) == 0:
+            print("No records available.")
+            return
+        for i in range(len(files)):
+            print(str(i + 1) + ") " + files[i])
+        choice = int(input("Choice: "))
+        if 0 < choice <= len(files):
+            print("Please enter the new access policy for the health record:")
+            print("Example = (PATIENT and RELATED-TO-0)")
+            policy = input("Policy:")
+            res = user.replace(files[choice - 1], policy)
+            if len(res) < 15:
+                print("Health record has been updated!")
+            else:
+                print("Health record was not changed!")
             return
         else:
             print("Input not recognized, please try again.")
