@@ -13,3 +13,10 @@ RUN cd ~/charm && make && make install && ldconfig
 # Clone, compile and install the ABE library.
 RUN git clone https://github.com/sagrawal87/ABE ~/abe
 RUN cd ~/abe && make && pip3 install .
+
+# Clone our projectfiles to the docker image
+COPY ./ABE/ /sdm/ABE/
+COPY ./cp_abe_model/ /sdm/cp_abe_model/
+RUN chmod +x -R /sdm/
+
+CMD ["python3", "/sdm/cp_abe_model/cli.py"]
