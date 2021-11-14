@@ -1,6 +1,3 @@
 [submodule "ABE"]
 	path = ABE
 	url = git@github.com:sagrawal87/ABE.git
-[submodule "openabe"]
-	path = openabe
-	url = git@github.com:zeutro/openabe.git
