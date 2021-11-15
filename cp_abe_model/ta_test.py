@@ -21,7 +21,7 @@ class TestTA(unittest.TestCase):
     def test_invalid_can_user_do_upload(self):
         user_role_amount = [1, 1, 1, 1, 1, 1]
         self.ta.make_users(-1, user_role_amount)
-        result = self.ta.can_user_do_upload(0, 0)
+        result = self.ta.can_user_do_upload(1, 0)
         self.assertFalse(result)
 
     def test_get_attributes(self):
