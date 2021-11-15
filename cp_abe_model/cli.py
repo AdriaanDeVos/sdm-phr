@@ -88,7 +88,7 @@ def user_actions(user):
         if user.get_role().name == 'PATIENT':
             print("3) Provide read access to your health records")
             print("4) Provide write access to your health records")
-            print("5) Change access policy of exiting record")
+            print("5) Change access policy of existing record")
         choice = input()
         if choice == "0":
             return
