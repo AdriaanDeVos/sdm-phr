@@ -60,6 +60,13 @@ class TA:
         return user
 
     def make_users(self, admin_id, user_role_amount):
+        """
+        Creates user objects based on the parameter provided.
+        An user can create users if: they are an admin/ admin_id = -1
+        :param admin_id: The user that wants to have users created. Which much be an admin identifier.
+        :param user_role_amount: A list stating how many of each user type needs to be created
+        :return: List of the created users
+        """
         users = []
         if admin_id == -1:
             for i in range(len(user_role_amount)):
